@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Bookstore</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="logo">📚 BookStore</h1>
+        <nav class="nav">
+          <button class="nav-btn" id="home-btn">Home</button>
+          <button class="nav-btn" id="cart-btn">
+            Cart <span class="cart-count" id="cart-count">0</span>
+          </button>
+          <button class="nav-btn" id="orders-btn">Orders</button>
+          <div class="auth-buttons" id="auth-buttons">
+            <button class="btn btn-primary" id="login-btn">Login</button>
+            <button class="btn btn-secondary" id="register-btn">Register</button>
+          </div>
+          <div class="user-info hidden" id="user-info">
+            <span id="username-display"></span>
+            <button class="btn btn-secondary" id="logout-btn">Logout</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+      <!-- Auth Modal -->
+      <div class="modal hidden" id="auth-modal">
+        <div class="modal-content">
+          <span class="close" id="close-modal">&times;</span>
+          <h2 id="modal-title">Login</h2>
+          <form id="auth-form">
+            <div id="username-field" class="form-group hidden">
+              <label>Username</label>
+              <input type="text" id="username-input" required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="email-input" required>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="password-input" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="auth-submit">Login</button>
+            <p class="switch-auth">
+              <span id="switch-text">Don't have an account?</span>
+              <button type="button" class="link-btn" id="switch-auth">Register</button>
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Home View -->
+      <div id="home-view">
+        <div class="filters-section">
+          <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search books by title or author...">
+            <button class="btn btn-primary" id="search-btn">Search</button>
+          </div>
+          <div class="filters">
+            <select id="category-filter">
+              <option value="All">All Categories</option>
+            </select>
+            <select id="sort-filter">
+              <option value="title">Sort by Title</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Highest Rated</option>
+            </select>
+            <div class="price-filter">
+              <label>Price Range:</label>
+              <input type="number" id="min-price" placeholder="Min" min="0">
+              <span>-</span>
+              <input type="number" id="max-price" placeholder="Max" min="0">
+              <button class="btn btn-secondary" id="apply-price-filter">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="books-grid" id="books-grid">
+          <!-- Books will be loaded here -->
+        </div>
+        <div class="loading hidden" id="loading">Loading books...</div>
+        <div class="empty-state hidden" id="empty-state">
+          <p>No books found. Try adjusting your filters.</p>
+        </div>
+      </div>
+
+      <!-- Cart View -->
+      <div class="view hidden" id="cart-view">
+        <h2>Your Cart</h2>
+        <div id="cart-items">
+          <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-summary">
+          <div class="total">
+            <strong>Total: $<span id="cart-total">0.00</span></strong>
+          </div>
+          <button class="btn btn-primary btn-large" id="checkout-btn">Proceed to Checkout</button>
+        </div>
+        <div class="empty-cart hidden" id="empty-cart">
+          <p>Your cart is empty. Start shopping!</p>
+        </div>
+      </div>
+
+      <!-- Orders View -->
+      <div class="view hidden" id="orders-view">
+        <h2>Order History</h2>
+        <div id="orders-list">
+          <!-- Orders will be loaded here -->
+        </div>
+        <div class="empty-state hidden" id="empty-orders">
+          <p>You haven't placed any orders yet.</p>
+        </div>
+      </div>
+
+      <!-- Checkout Modal -->
+      <div class="modal hidden" id="checkout-modal">
+        <div class="modal-content">
+          <span class="close" id="close-checkout">&times;</span>
+          <h2>Checkout</h2>
+          <form id="checkout-form">
+            <div class="form-group">
+              <label>Street Address</label>
+              <input type="text" id="street-input" required>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="city-input" required>
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <input type="text" id="state-input" required>
+            </div>
+            <div class="form-group">
+              <label>Zip Code</label>
+              <input type="text" id="zip-input" required>
+            </div>
+            <div class="form-group">
+              <label>Country</label>
+              <input type="text" id="country-input" required>
+            </div>
+            <div class="checkout-summary">
+              <strong>Total: $<span id="checkout-total">0.00</span></strong>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Book Details Modal -->
+      <div class="modal hidden" id="book-details-modal">
+        <div class="modal-content modal-large">
+          <span class="close" id="close-book-details">&times;</span>
+          <div class="book-details-content">
+            <div class="book-details-image">
+              <img id="book-detail-image" src="" alt="Book Cover" onerror="this.src='https://via.placeholder.com/300x400?text=Book+Cover'">
+            </div>
+            <div class="book-details-info">
+              <h2 id="book-detail-title"></h2>
+              <p class="book-detail-author" id="book-detail-author"></p>
+              <div class="book-detail-meta">
+                <span class="book-detail-category" id="book-detail-category"></span>
+                <span class="book-detail-isbn" id="book-detail-isbn"></span>
+              </div>
+              <div class="book-detail-rating-section">
+                <div class="book-detail-rating">
+                  <span class="rating-stars" id="book-detail-rating"></span>
+                  <span class="rating-text" id="book-detail-rating-text"></span>
+                </div>
+                <div class="book-detail-inventory" id="book-detail-inventory"></div>
+              </div>
+              <div class="book-detail-price-section">
+                <span class="book-detail-price" id="book-detail-price"></span>
+              </div>
+              <div class="book-detail-description">
+                <h3>Description</h3>
+                <p id="book-detail-description"></p>
+              </div>
+              <div class="book-detail-actions">
+                <button class="btn btn-primary btn-large" id="book-detail-add-cart">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
